@@ -4,6 +4,15 @@ public class BinaryExpr extends Expr {
 
     public static final int PLUS = 1;
     public static final int MINUS = 2;
+    public static final int TIMES = 3;
+    public static final int LEQ = 4;
+    public static final int GEQ = 5;
+    public static final int EQ = 6;
+    public static final int NEQ = 7;
+    public static final int LT = 8;
+    public static final int GT = 9;
+    public static final int AND = 10;
+    public static final int OR = 11;
 
     final Expr expr1;
     final int operator;

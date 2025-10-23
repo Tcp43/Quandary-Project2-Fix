@@ -3,7 +3,7 @@ package parser;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
-
+import static parser.sym.*;
 import interpreter.Interpreter;
 
 %%
@@ -15,6 +15,8 @@ import interpreter.Interpreter;
 %char
 %line
 %column
+%type java_cup.runtime.Symbol
+%unicode
 
 %{
     StringBuffer string = new StringBuffer();
@@ -47,6 +49,7 @@ import interpreter.Interpreter;
      return symbolFactory.newSymbol("EOF", EOF, new Location(yyline + 1, yycolumn + 1, yychar), new Location(yyline + 1, yycolumn + 1, yychar + 1));
 %eofval}
 
+Identifier = [A-Za-z_][A-Za-z0-9_]*
 
 IntLiteral = 0 | [1-9][0-9]*
 
@@ -60,13 +63,36 @@ white_space = {new_line} | [ \t\f]
 /* This is where tokens are recognized. Every token recognized by the scanner corresponds to a terminal in the parser's grammar. */
 
 /* int literal token */
-{IntLiteral} { return symbol("Intconst", INTCONST, Long.parseLong(yytext())); }
+{IntLiteral}     { return symbol("INTCONST", INTCONST, Long.parseLong(yytext())); }
 
-/* other tokens (you can add more tokens here) */
-"+"               { return symbol("+",  PLUS); }
-"-"               { return symbol("-",  MINUS); }
-"("               { return symbol("(",  LPAREN); }
-")"               { return symbol(")",  RPAREN); }
+  "int"            { return symbol("INT", INT); }
+  "return"         { return symbol("RETURN", RETURN); }
+  "print"          { return symbol("PRINT", PRINT); }
+  "if"             { return symbol("IF", IF); }
+  "else"           { return symbol("ELSE", ELSE); }
+
+  
+  "<="             { return symbol("LE", LE); }
+  ">="             { return symbol("GE", GE); }
+  "=="             { return symbol("EQ", EQ); }
+  "!="             { return symbol("NE", NE); }
+  "&&"             { return symbol("AND", AND); }
+  "||"             { return symbol("OR", OR); }
+  "+"              { return symbol("PLUS", PLUS); }
+  "-"              { return symbol("MINUS", MINUS); }
+  "*"              { return symbol("TIMES", TIMES); }
+  "("              { return symbol("LPAREN", LPAREN); }
+  ")"              { return symbol("RPAREN", RPAREN); }
+  "{"              { return symbol("LCURLY", LCURLY); }
+  "}"              { return symbol("RCURLY", RCURLY); }
+  "="              { return symbol("ASSIGN", ASSIGN); }
+  "<"              { return symbol("LT", LT); }
+  ">"              { return symbol("GT", GT); }
+  "!"              { return symbol("NOT", NOT); }
+  ";"              { return symbol("SEMICOLON", SEMICOLON); }
+
+  /* ----- Identifier (AFTER keywords) ----- */
+  {Identifier}     { return symbol("IDENT", IDENT, yytext()); }
 
 /* You shouldn't need to modify anything below this */
 
