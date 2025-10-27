@@ -120,7 +120,18 @@ expr ::=
       {: RESULT = new ConstExpr(c, loc(cleft, cright)); :}
   
   | IDENT:fname LPAREN args:as RPAREN:rpar
-    {: RESULT = new CallExpr(fname, as, loc(fnameleft, rparright)); :}
+  {:
+     if (fname.equals("main")) {
+        if (as.size() != 1) {
+           interpreter.Interpreter.fatalError("main() expects 1 argument",
+              interpreter.Interpreter.EXIT_PARSING_ERROR);
+        }
+        RESULT = new MainCallExpr(as.get(0), loc(fnameleft, rparright));
+     } else {
+        RESULT = new CallExpr(fname, as, loc(fnameleft, rparright));
+     }
+  :}
+
       
   | IDENT:varName
       {: RESULT = new IdentExpr(varName, loc(varNameleft, varNameright)); :}

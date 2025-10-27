@@ -130,9 +130,13 @@ expr ::=
   | RANDOMINT:ri LPAREN expr:e RPAREN:rp
       {: RESULT = new RandomIntBoundedExpr(e, loc(rileft, rpright)); :}
 
- | MAIN:m LPAREN expr:e RPAREN:rpar
-      {: RESULT = new MainCallExpr(e, loc(mleft, rparright)); :}
-
+| MAIN:m LPAREN expr:e RPAREN:rpar
+    {:
+       java.util.ArrayList<Expr> as = new java.util.ArrayList<Expr>();
+       as.add(e);
+       RESULT = new CallExpr("main", as, loc(mleft, rparright));
+    :}
+    
   | MINUS expr:e 
       {: RESULT = new UnaryMinusExpr(e, loc(eleft, eright)); :}
       %prec UMINUS
