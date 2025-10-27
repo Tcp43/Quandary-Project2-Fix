@@ -100,16 +100,7 @@ public class Interpreter {
         this.random = new Random(quandaryArg);
         this.env = new HashMap<String, Object>();
 
-        if (astRoot.getFunctions() != null) {
-            for (FunctionDecl fd : astRoot.getFunctions()) {
-                if ("main".equals(fd.getName())) {
-                    fatalError("Redefinition of main", EXIT_PARSING_ERROR);
-                }
-                if (functions.put(fd.getName(), fd) != null) {
-                    fatalError("Duplicate function: " + fd.getName(), EXIT_PARSING_ERROR);
-                }
-            }
-        }
+        
     }
 
     void initMemoryManager(String gcType, long heapBytes) {
